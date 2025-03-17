@@ -190,7 +190,7 @@ body {
 .restaurant__star {
   width: 30px;
   height: 30px;
-  background-image: url('public/images/Star\ border.png');
+  background-image: url('./images/Star\ border.png');
   background-image: no-repeat;
   background-size: 100% 100%;
   cursor: pointer;
@@ -199,7 +199,7 @@ body {
 }
 
 .restaurant__star.favorite {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIoSURBVHgB7ZZNbtpQEIBnnsGKQhdGgkV35gRNT1DYpbQL9wRNTwCcoM0JkiM0NyBSFbJLbtDcoOwitYmw1JZWBr/JDAkJBMx7fmQTiW/D8PyeZzx/bwA2PGeumqW9q7fbEaxBAdYB4SMgitQFRxAcGUSlnTSh7yKTUo3qtz/n4IACR9IRtaYyanIOg5MHBtFWmCbqx8xS7Pl+rdyNY8iJkwfSxKs/WgrGSdIGB5wMQKDPi2vQAgdyGyClRwDhkkfBr/cv6pCTlTlwGQWh/BbG45ATLUTUARC2Mgzgl+EFZ+QR6UKfPIpJU5z6xfhlN+4bDRhEQZCORgdIVJf/WUpc4XYRs/F9QrjwisXONGHnPDDY3Qq1UmdPrfzeCIC+0n6jfPrgkbkcKJ/+5w26gciufHLteK58//Ws8jujlsPJdsiBcMrsBQiOKr3h3rJHmVVQOfnb5lDsw9q6YT9LuWDshNfvSm0iOgAH+Fyn2vt3uGqPVSuW+katzyAP5H2o9H4bb0nny8isn6zuBTsDtK5DXizPWBnAZfkGcmJ7xjIEtAN5IbszRgNk8uFaCh6vS1eTRGPp00ReJPjZLBmNMBowHi3GUmpbuppkOfeLryIv6xlI5jwwGjAXS26nnvZr1ZPhl9npR2RZ87SuwcyAiqheGd9v2nDd3J6MXkRex6auBZkZZGhhr3BHHdZW7V3pAZn9CPB46m6wZBIWvtT4+44vd29nig0bsrgBOyjNl0aqvSEAAAAASUVORK5CYII=');
+  background-image: url('./images/Star.png');
 }
 
 .restaurant__column {
