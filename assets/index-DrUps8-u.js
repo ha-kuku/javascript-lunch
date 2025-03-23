@@ -363,6 +363,21 @@ class RestaurantDetailModal {
   }
 }
 _detailModal = new WeakMap();
+const STORAGE_KEY = "addedRestaurants";
+function getStoredRestaurants() {
+  const storedData = localStorage.getItem(STORAGE_KEY);
+  return storedData ? JSON.parse(storedData) : [];
+}
+function saveRestaurants(restaurants) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(restaurants));
+}
+function deleteRestaurantById(id) {
+  const storedData = getStoredRestaurants().filter((item) => item.id !== id);
+  saveRestaurants(storedData);
+}
+function getAllRestaurants() {
+  return [...RESTAURANT_ITEMS, ...getStoredRestaurants()];
+}
 function createRestaurantData(data) {
   return {
     id: data.id,
@@ -378,6 +393,7 @@ function toggleFavorite(id) {
   const restaurant = RESTAURANT_ITEMS.find((item) => item.id === id);
   if (restaurant) {
     restaurant.favorite = !restaurant.favorite;
+    saveRestaurants(RESTAURANT_ITEMS);
   }
 }
 function getFavoriteRestaurants() {
@@ -394,7 +410,10 @@ function createTags(data) {
     "restaurant__distance text-body",
     `캠퍼스부터 ${data.distance}분 내`
   );
-  const starImg = createElement("div", "restaurant__star");
+  const starImg = createElement("img", "restaurant__star", null, {
+    src: data.favorite ? "./images/Star.png" : "./images/Star border.png",
+    alt: "favorite star"
+  });
   const descriptionPara = createElement("p", "restaurant__description text-body", data.description);
   return { categoryImg, nameHeading, distanceSpan, starImg, descriptionPara };
 }
@@ -412,7 +431,8 @@ function createRestaurantItem(data) {
   starImg.addEventListener("click", (event) => {
     event.stopPropagation();
     toggleFavorite(restaurantData.id);
-    starImg.classList.toggle("favorite");
+    const newSrc = starImg.src.includes("Star.png") ? "./images/Star border.png" : "./images/Star.png";
+    starImg.src = newSrc;
     updateFavoriteRestaurants();
   });
   restaurantItem.addEventListener("click", () => {
@@ -441,21 +461,6 @@ function updateFavoriteRestaurants() {
     const restaurantItem = createRestaurantItem(data);
     $favoriteTabContent.appendChild(restaurantItem);
   });
-}
-const STORAGE_KEY = "addedRestaurants";
-function getStoredRestaurants() {
-  const storedData = localStorage.getItem(STORAGE_KEY);
-  return storedData ? JSON.parse(storedData) : [];
-}
-function saveRestaurants(restaurants) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(restaurants));
-}
-function deleteRestaurantById(id) {
-  const storedData = getStoredRestaurants().filter((item) => item.id !== id);
-  saveRestaurants(storedData);
-}
-function getAllRestaurants() {
-  return [...RESTAURANT_ITEMS, ...getStoredRestaurants()];
 }
 function createRestaurantList(datas) {
   const restaurantList = createElement("ul", "restaurant-list");
@@ -530,6 +535,13 @@ const program = {
   loadData() {
     const storedData = JSON.parse(localStorage.getItem("addedRestaurants")) || [];
     this.filteredItems = [...RESTAURANT_ITEMS, ...storedData];
+    this.filteredItems = [...RESTAURANT_ITEMS, ...storedData].map((item) => {
+      const storedRestaurant = storedData.find((stored) => stored.id === item.id);
+      if (storedRestaurant) {
+        item.favorite = storedRestaurant.favorite;
+      }
+      return item;
+    });
   },
   initUI() {
     this.loadData();
