@@ -335,7 +335,7 @@ class RestaurantDetailModal {
     __privateAdd(this, _detailModal);
     __privateSet(this, _detailModal, new Modal());
   }
-  updateModalContent({ data, onDelete }) {
+  updateModalContent({ data }) {
     const $restaurantItem = createRestaurantItem(data);
     $restaurantItem.classList.add("restaurant__column");
     const $buttonContainer = createElement("div", "button-container");
@@ -343,8 +343,8 @@ class RestaurantDetailModal {
       className: "button--secondary",
       textContent: "삭제하기",
       buttonType: "button",
-      onClick: (event) => {
-        onDelete(event, data.id);
+      onClick: () => {
+        program.deleteRestaurant(data.id);
         __privateGet(this, _detailModal).toggle();
       }
     });
@@ -538,14 +538,18 @@ const program = {
   filteredItems: [],
   loadData() {
     const storedData = JSON.parse(localStorage.getItem("addedRestaurants")) || [];
-    this.filteredItems = RESTAURANT_ITEMS.map((item) => {
-      const storedRestaurant = storedData.find((stored) => stored.id === item.id);
-      return storedRestaurant ? { ...item, favorite: storedRestaurant.favorite } : item;
-    });
-    const newRestaurants = storedData.filter(
-      (stored) => !RESTAURANT_ITEMS.some((item) => item.id === stored.id)
-    );
-    this.filteredItems.push(...newRestaurants);
+    if (storedData.length > 0) {
+      this.filteredItems = storedData;
+    } else {
+      this.filteredItems = RESTAURANT_ITEMS.map((item) => {
+        const storedRestaurant = storedData.find((stored) => stored.id === item.id);
+        return storedRestaurant ? { ...item, favorite: storedRestaurant.favorite } : item;
+      });
+      const newRestaurants = storedData.filter(
+        (stored) => !RESTAURANT_ITEMS.some((item) => item.id === stored.id)
+      );
+      this.filteredItems.push(...newRestaurants);
+    }
   },
   initUI() {
     this.loadData();
@@ -600,6 +604,13 @@ const program = {
     storedData.push(newRestaurant);
     localStorage.setItem("addedRestaurants", JSON.stringify(storedData));
     this.filteredItems.push(newRestaurant);
+    this.updateRestaurantList();
+  },
+  deleteRestaurant(id) {
+    const storedData = JSON.parse(localStorage.getItem("addedRestaurants")) || [];
+    const updatedStoredData = storedData.filter((restaurant) => restaurant.id !== id);
+    localStorage.setItem("addedRestaurants", JSON.stringify(updatedStoredData));
+    this.filteredItems = updatedStoredData;
     this.updateRestaurantList();
   },
   updateRestaurantList() {
